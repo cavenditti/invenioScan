@@ -1,0 +1,6 @@
+[submodule "app"]
+	path = app
+	url = https://github.com/cavenditti/InvenioScan-app.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/cavenditti/invenioScan-backend.git
