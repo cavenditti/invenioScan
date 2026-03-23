@@ -2,70 +2,79 @@
 
 ## Goal
 
-Build a mobile-assisted ingestion pipeline for InvenioILS that lets operators authenticate, scan or select a shelf context, submit ISBN or image-backed scans quickly, and attach enough metadata for later catalog enrichment.
+Build a self-contained book position tracker that lets operators authenticate, scan or select a shelf context, submit ISBN or image-backed scans, and track where every book copy lives across physical shelves. A polished web UI provides browsing, search, and admin capabilities.
 
 ## Product Decisions
 
+- **No external library system dependency.** The backend owns all data in its own database.
 - Backend owns shelf QR code generation.
-- Shelf position metadata must be attached to the InvenioILS-facing metadata payload.
-- Local backend accounts with JWT are sufficient for the first release.
-- The first implementation slice favors a stable middleware contract over a full worker or database stack.
-- The app should already expose optional title and author fields to support manual enrichment while scanning.
+- Shelf position metadata is first-class: every book copy is pinned to a shelf/row/position/height.
+- OAuth2 password flow with multi-user registration requiring admin approval. Registrations auto-denied after 7 days.
+- SQLite by default (zero-config), Postgres-ready by changing `DATABASE_URL`.
+- Web UI via Jinja2 + HTMX + Pico CSS — no JS build step, served directly by FastAPI.
+- Book `extra` JSON field for arbitrary metadata expansion without schema changes.
+- The mobile app handles scanning workflows; the web UI handles browsing and admin.
+
+## Data Model
+
+- **User** — username, email, hashed password, status (pending/approved/denied), admin flag.
+- **Book** — title, author, isbn, publication year, document type, language, cover image URL, extra (JSON), notes.
+- **Shelf** — unique shelf_id (human-readable, e.g. "A1"), label.
+- **BookCopy** — links a book to a shelf position (row, position, height), with a UUID scan_id for traceability.
+
+One book → many copies. One shelf → many copies. One user → many books (creator tracking).
 
 ## Phase Plan
 
-### Phase 1: Foundation
+### Phase 1: Foundation (✅ Done)
 
-- Minimal FastAPI application.
-- Settings management, JWT auth helpers, request/response schemas, and router structure.
-- A pluggable InvenioILS adapter boundary so API validation and external integration stay decoupled.
+- FastAPI application with settings management and router structure.
+- SQLModel models for User, Book, Shelf, BookCopy.
+- Async SQLite database with auto-migration via `create_all()`.
+- OAuth2 password flow with JWT, bcrypt hashing, multi-user registration + admin approval.
+- Bootstrap admin auto-created on first startup.
 
-### Phase 2: Core Middleware API
+### Phase 2: Core API (✅ Done)
 
-- Implement `POST /api/v1/auth/login` with a bootstrap operator account from configuration.
-- Implement `GET /api/v1/health` for readiness checks.
-- Implement `POST /api/v1/ingest` to accept shelf context, ISBN or image reference, and optional title/author.
-- Implement a QR utility endpoint to generate printable shelf tags.
+- `POST /api/v1/auth/register` — create pending user.
+- `POST /api/v1/auth/login` — OAuth2 form login, returns JWT.
+- `GET /api/v1/auth/me` — current user profile.
+- Full CRUD for books, shelves, and book copies.
+- `POST /api/v1/ingest` — mobile scanning: creates book + copy from ISBN/image scan.
+- `POST /api/v1/ingest/upload` — image upload ingest.
+- Admin user management: list, approve, deny.
+- QR shelf tag generation (payload, PNG, printable sheet).
 
-### Phase 3: Mobile App Slice
+### Phase 3: Web UI (✅ Done)
 
-- Bootstrap an Expo TypeScript app.
-- Add login and secure JWT storage.
-- Add a manual ingest form with shelf metadata, ISBN or image reference, and optional title/author.
-- Leave the camera-driven flow for the next slice once the backend contract is stable.
+- Jinja2 + HTMX + Pico CSS web platform served by FastAPI.
+- Dashboard with stats and recent books.
+- Book list with live HTMX search, book detail with copies.
+- Shelf list and detail views.
+- Admin user management page with approve/deny buttons.
+- Cookie-based auth backed by same JWT tokens.
 
-### Phase 4: InvenioILS Integration Hardening
+### Phase 4: Mobile App (✅ Done)
 
-- Replace the stub adapter with real HTTP integration once the target instance metadata contract is confirmed.
-- Ensure shelf position data is written into the record payload and internal tracking identifiers are preserved.
-- Decide whether scan images become external references, identifiers, or linked e-items.
+- Expo TypeScript app with barcode/QR scanning.
+- Login, shelf QR scanning, book barcode scanning, image capture.
+- OAuth2-compatible login (form-encoded).
+- Ingest responses show book_id/copy_id/scan_id.
 
-### Phase 5: Queueing, Persistence, and Deployment
+### Phase 5: Future Enhancements
 
-- Add Postgres-backed audit data for operators, shelves, and ingest jobs.
-- Async processing so the mobile client never waits on InvenioILS.
-- Add Dockerfiles and a Compose stack for API, worker, and Postgres.
-
-## First Implementation Slice in This Repo
-
-### Backend
-
-- FastAPI app bootstrap in `backend/invenioscan`.
-- JWT login using bootstrap credentials from environment variables.
-- Ingest validation with normalized metadata output.
-- QR payload builder and PNG QR endpoint.
-- Stub InvenioILS adapter that prepares the outbound payload shape, including shelf position metadata.
-
-### App
-
-- Expo app bootstrap under `app/`.
-- Secure token persistence with `expo-secure-store`.
-- Login form.
-- Manual ingest form with optional title and author.
+- Alembic migrations when schema stabilizes.
+- Postgres deployment option with Docker Compose.
+- Book metadata enrichment via ISBN lookup APIs (Open Library, Google Books).
+- Bulk import/export (CSV, JSON).
+- Search improvements: full-text search, faceted filtering.
+- Async worker for background processing (image OCR, metadata enrichment).
+- Audit log for tracking who scanned what and when.
 
 ## Open Questions
 
-- Which exact InvenioILS fields should store operator tracking and shelf position metadata.
-- Whether captured images should be represented as e-items, external references, or a custom extension.
-- When to enable queueing and durable persistence relative to metadata mapping validation.
+- Whether to add ISBN lookup integration for automatic metadata enrichment.
+- When to enable Postgres + Docker Compose deployment.
+- Whether captured images should become cover images or separate attachments.
+- Full-text search strategy (SQLite FTS5 vs. external search engine).
 
