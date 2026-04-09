@@ -1,4 +1,4 @@
-# InvenioScan Grand Plan
+# Shelfscan Grand Plan
 
 ## Goal
 
