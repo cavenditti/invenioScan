@@ -13,7 +13,7 @@ Build a self-contained book position tracker that lets operators authenticate, s
 - SQLite by default (zero-config), Postgres-ready by changing `DATABASE_URL`.
 - Web UI via Jinja2 + HTMX + Pico CSS — no JS build step, served directly by FastAPI.
 - Book `extra` JSON field for arbitrary metadata expansion without schema changes.
-- The mobile app handles scanning workflows; the web UI handles browsing and admin.
+- The backend-owned `/scan` page handles scanning workflows; the rest of the web UI handles browsing and admin.
 
 ## Data Model
 
@@ -40,7 +40,7 @@ One book → many copies. One shelf → many copies. One user → many books (cr
 - `POST /api/v1/auth/login` — OAuth2 form login, returns JWT.
 - `GET /api/v1/auth/me` — current user profile.
 - Full CRUD for books, shelves, and book copies.
-- `POST /api/v1/ingest` — mobile scanning: creates book + copy from ISBN/image scan.
+- `POST /api/v1/ingest` — shelf-first scanning: creates book + copy from ISBN/image scan.
 - `POST /api/v1/ingest/upload` — image upload ingest.
 - Admin user management: list, approve, deny.
 - QR shelf tag generation (payload, PNG, printable sheet).
@@ -54,11 +54,11 @@ One book → many copies. One shelf → many copies. One user → many books (cr
 - Admin user management page with approve/deny buttons.
 - Cookie-based auth backed by same JWT tokens.
 
-### Phase 4: Mobile App (✅ Done)
+### Phase 4: Integrated Scanner (✅ Done)
 
-- Expo TypeScript app with barcode/QR scanning.
-- Login, shelf QR scanning, book barcode scanning, image capture.
-- OAuth2-compatible login (form-encoded).
+- Backend-served `/scan` page with browser camera access.
+- Shelf QR scanning, book barcode scanning, image capture, and manual fallbacks.
+- Same-origin cookie auth for both web pages and API calls.
 - Ingest responses show book_id/copy_id/scan_id.
 
 ### Phase 5: Future Enhancements
