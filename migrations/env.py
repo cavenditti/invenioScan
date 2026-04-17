@@ -24,7 +24,7 @@ target_metadata = SQLModel.metadata
 def _get_sync_url() -> str:
     """Convert the async DB URL to its synchronous equivalent for Alembic."""
     url = get_settings().database_url
-    return url.replace("+aiosqlite", "").replace("+asyncpg", "+psycopg2")
+    return url.replace("+aiosqlite", "").replace("+asyncpg", "+psycopg")
 
 
 def run_migrations_offline() -> None:

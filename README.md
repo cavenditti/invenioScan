@@ -96,7 +96,10 @@ The main ones you will care about are:
 - `INVSCAN_BOOTSTRAP_ADMIN_PASSWORD`
 - `INVSCAN_BOOTSTRAP_ADMIN_EMAIL`
 - `INVSCAN_PUBLIC_BASE_URL`
+- `INVSCAN_UPLOAD_BACKEND`
 - `INVSCAN_UPLOAD_DIR`
+- `INVSCAN_S3_ENDPOINT_URL`
+- `INVSCAN_S3_BUCKET`
 - `INVSCAN_COOKIE_SECURE`
 
 See `.env.example` for the full set of documented options.
@@ -104,7 +107,8 @@ See `.env.example` for the full set of documented options.
 ## Stack
 
 - **Backend**: FastAPI + SQLModel
-- **Persistence**: SQLite by default
+- **Persistence**: SQLite by default, PostgreSQL supported via config
+- **Uploads**: local filesystem by default, S3-compatible object storage supported
 - **Templates/UI**: Jinja2 + HTMX + Pico CSS
 - **Scanner**: backend-served browser page with QR, barcode, and cover-capture flow
 - **Auth**: JWT-backed login with cookie-based web sessions

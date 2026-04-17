@@ -2,6 +2,7 @@ import logging
 import secrets
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -49,7 +50,15 @@ class Settings(BaseSettings):
 
     # Uploads
     public_base_url: str | None = None
+    upload_backend: Literal["local", "s3"] = "local"
     upload_dir: Path = Path("uploads")
+    s3_endpoint_url: str | None = None
+    s3_region: str | None = None
+    s3_bucket: str | None = None
+    s3_access_key: str | None = None
+    s3_secret_key: str | None = None
+    s3_prefix: str = "uploads"
+    s3_force_path_style: bool = False
 
     # Scanner sub-path (served by the backend web UI)
     scanner_url: str = "/scan"
@@ -82,6 +91,28 @@ class Settings(BaseSettings):
     smtp_use_tls: bool = True
     email_from: str = "shelfscan@localhost"
     admin_notification_email: str | None = None
+
+    @model_validator(mode="after")
+    def _validate_upload_backend(self) -> "Settings":
+        if self.upload_backend == "s3":
+            missing = [
+                name
+                for name in (
+                    "s3_endpoint_url",
+                    "s3_region",
+                    "s3_bucket",
+                    "s3_access_key",
+                    "s3_secret_key",
+                )
+                if not getattr(self, name)
+            ]
+            if missing:
+                joined = ", ".join(missing)
+                raise ValueError(
+                    f"upload_backend='s3' requires the following settings: {joined}"
+                )
+            self.s3_prefix = self.s3_prefix.strip("/")
+        return self
 
 
 @lru_cache

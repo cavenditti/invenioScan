@@ -75,8 +75,9 @@ def create_app() -> FastAPI:
         allow_headers=["Authorization", "Content-Type", "Accept"],
     )
 
-    upload_dir = Path(settings.upload_dir)
-    upload_dir.mkdir(parents=True, exist_ok=True)
+    if settings.upload_backend == "local":
+        upload_dir = Path(settings.upload_dir)
+        upload_dir.mkdir(parents=True, exist_ok=True)
     # /uploads is served by an authenticated route in routes_uploads.py, not as raw StaticFiles
 
     # Serve static assets (CSS/JS) if they exist
