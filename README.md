@@ -1,4 +1,4 @@
-# Shelfscan
+# ShelfScan
 
 > I'm helping a friend moving lots of books.
 > I wanted to build a system to quickly track where books end up on shelves using QR codes and a browser-based scanner.

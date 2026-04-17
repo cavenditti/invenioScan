@@ -1,5 +1,5 @@
 [project]
-name = "invenioscan"
+name = "shelfscan"
 version = "0.2.0"
 description = "Book position tracker with FastAPI backend, web UI, and integrated browser scanner"
 readme = "README.md"

@@ -10,7 +10,7 @@ node_modules/
 backend/tests/
 backend/.venv/
 backend/__pycache__/
-backend/invenioscan.egg-info/
+backend/shelfscan.egg-info/
 app/.expo/
 memories/
 uploads/

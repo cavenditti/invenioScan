@@ -2,8 +2,8 @@
 
 import pytest
 
-from invenioscan.isbn_lookup import _extract_year, _parse_response, lookup_isbn
-from invenioscan.settings import Settings
+from shelfscan.isbn_lookup import _extract_year, _parse_response, lookup_isbn
+from shelfscan.settings import Settings
 
 
 # ── Year extraction ───────────────────────────────────────

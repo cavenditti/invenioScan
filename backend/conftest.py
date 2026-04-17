@@ -2,7 +2,7 @@
 
 import os
 
-# Must be set before `invenioscan.settings` is imported so Pydantic validation passes.
+# Must be set before `shelfscan.settings` is imported so Pydantic validation passes.
 os.environ.setdefault(
     "INVSCAN_JWT_SECRET_KEY", "test-secret-key-only-for-pytest-do-not-use-in-production"
 )

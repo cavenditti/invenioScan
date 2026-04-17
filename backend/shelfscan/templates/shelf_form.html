@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if shelf and shelf.id else "Add" }} Shelf — ShelfScan{% endblock %}
+{% block content %}
+<div class="page-header">
+  <hgroup>
+    <p class="kicker">{{ "Edit" if shelf and shelf.id else "New" }} Shelf</p>
+    <h1 class="mt-0">{{ shelf.shelf_id if shelf and shelf.id else "Add a shelf" }}</h1>
+  </hgroup>
+</div>
+
+{% if error %}
+<div class="flash-error">{{ error }}</div>
+{% endif %}
+
+<div class="card form-card-medium">
+  <form method="post">
+    <label>
+      Shelf ID <small>(required, stable identifier)</small>
+      <input type="text" name="shelf_id" value="{{ shelf.shelf_id if shelf else '' }}" required maxlength="40" {{ "readonly" if shelf and shelf.id else "" }}>
+    </label>
+
+    <div class="grid">
+      <label>
+        Row <small>(required, e.g. A)</small>
+        <input type="text" name="row" value="{{ shelf.row if shelf else '' }}" required maxlength="10">
+      </label>
+      <label>
+        Position <small>(required)</small>
+        <input type="number" name="position" value="{{ shelf.position if shelf else 1 }}" min="1" required>
+      </label>
+      <label>
+        Height <small>(required)</small>
+        <input type="number" name="height" value="{{ shelf.height if shelf else 1 }}" min="1" required>
+      </label>
+    </div>
+
+    <label>
+      Label <small>(optional description)</small>
+      <input type="text" name="label" value="{{ shelf.label if shelf and shelf.label else '' }}" maxlength="200" placeholder="e.g. Main hall, left wall">
+    </label>
+
+    <div class="gap-row mt-1">
+      <button type="submit" class="btn-pill btn-pill-primary">{{ "Save Changes" if shelf and shelf.id else "Create Shelf" }}</button>
+      {% if shelf and shelf.id %}
+      <a href="/shelves/{{ shelf.id }}" class="btn-pill btn-pill-outline">Cancel</a>
+      {% else %}
+      <a href="/shelves" class="btn-pill btn-pill-outline">Cancel</a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}

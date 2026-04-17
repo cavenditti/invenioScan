@@ -1,6 +1,6 @@
-from invenioscan.qr import build_shelf_label, render_printable_qr_sheet
-from invenioscan.schemas import ShelfPosition
-from invenioscan.settings import Settings
+from shelfscan.qr import build_shelf_label, render_printable_qr_sheet
+from shelfscan.schemas import ShelfPosition
+from shelfscan.settings import Settings
 
 
 def test_build_shelf_label() -> None:

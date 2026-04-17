@@ -1,1 +1,5 @@
 app/
+/*.db
+/*.html
+memories/
+uploads/

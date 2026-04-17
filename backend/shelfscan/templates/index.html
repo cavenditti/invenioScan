@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — ShelfScan{% endblock %}
+{% block content %}
+<div class="page-header">
+  <hgroup>
+    <p class="kicker">Dashboard</p>
+    <h1 class="mt-0">Welcome back, {{ user.username }}</h1>
+  </hgroup>
+</div>
+
+<div class="grid">
+  <article class="stat-card">
+    <h2>{{ book_count }}</h2>
+    <p>Books</p>
+  </article>
+  <article class="stat-card">
+    <h2>{{ shelf_count }}</h2>
+    <p>Shelves</p>
+  </article>
+  <article class="stat-card">
+    <h2>{{ copy_count }}</h2>
+    <p>Copies tracked</p>
+  </article>
+  <article class="stat-card">
+    <a href="{{ scanner_url }}" style="text-decoration:none;color:inherit">
+      <h2><i class="icon-scan-line"></i></h2>
+      <p>Open Scanner</p>
+    </a>
+  </article>
+</div>
+
+<section>
+  <hgroup>
+    <h3>Recently added</h3>
+    <p class="text-muted">Last 10 books added to the catalog</p>
+  </hgroup>
+
+  {% if recent_books %}
+  <div class="card card-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in recent_books %}
+        <tr>
+          <td><a href="/books/{{ book.id }}">{{ book.title }}</a></td>
+          <td>{{ book.author or "—" }}</td>
+          <td>{{ book.isbn or "—" }}</td>
+          <td>{{ book.document_type }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted">No books yet. Start scanning or <a href="/books/new">add one manually</a>!</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -5,8 +5,7 @@
 > Claude (and others) are helping me helping my friend. 🙂
 > This repo is the codebase for that project.
 
-This repository contains the FastAPI backend for the main Shelfscan project:
-https://github.com/cavenditti/invenioScan
+This directory contains the FastAPI backend for the main ShelfScan project.
 
 The backend is a standalone FastAPI application with SQLite persistence (via SQLModel), a web UI (Jinja2 + HTMX + Pico CSS), an integrated `/scan` workflow, and a JSON API.
 
@@ -37,7 +36,7 @@ The backend is a standalone FastAPI application with SQLite persistence (via SQL
 
 All variables are prefixed with `INVSCAN_`.
 
-- `INVSCAN_DATABASE_URL` — SQLAlchemy URL (default: `sqlite+aiosqlite:///./invenioscan.db`)
+- `INVSCAN_DATABASE_URL` — SQLAlchemy URL (default: `sqlite+aiosqlite:///./shelfscan.db`)
 - `INVSCAN_CORS_ALLOWED_ORIGINS` — JSON array of allowed browser origins for external clients during development
 - `INVSCAN_JWT_SECRET_KEY`
 - `INVSCAN_BOOTSTRAP_ADMIN_USERNAME` / `_PASSWORD` / `_EMAIL`
@@ -57,7 +56,7 @@ Then open `http://localhost:8000/scan` to use the scanner.
 Or run with Uvicorn directly:
 
 ```bash
-uv run uvicorn invenioscan.app:app --reload
+uv run uvicorn shelfscan.app:app --reload
 ```
 
 ### Running tests

@@ -305,7 +305,7 @@ wheels = [
 ]
 
 [[package]]
-name = "invenioscan"
+name = "shelfscan"
 version = "0.2.0"
 source = { virtual = "." }
 dependencies = [

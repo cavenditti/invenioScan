@@ -11,8 +11,8 @@ from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
 # Import all models so SQLModel.metadata is fully populated
-import invenioscan.models  # noqa: F401
-from invenioscan.settings import get_settings
+import shelfscan.models  # noqa: F401
+from shelfscan.settings import get_settings
 
 config = context.config
 if config.config_file_name is not None:

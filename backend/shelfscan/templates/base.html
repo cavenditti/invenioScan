@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ShelfScan{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.min.css">
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% block nav %}
+  <nav class="top-nav">
+    <ul>
+      <li><strong class="nav-brand"><a href="/"><i class="icon-library"></i> ShelfScan</a></strong></li>
+    </ul>
+    {% if user %}
+    <ul>
+      <li><a href="/books"><i class="icon-book-open"></i> Books</a></li>
+      <li><a href="/shelves"><i class="icon-archive"></i> Shelves</a></li>
+      <li><a href="/qr"><i class="icon-qr-code"></i> QR</a></li>
+      <li><a href="{{ scanner_url }}"><i class="icon-scan-line"></i> Scan</a></li>
+      {% if user.is_admin %}<li><a href="/admin/users"><i class="icon-users"></i> Users</a></li>{% endif %}
+      <li><a href="/logout"><i class="icon-log-out"></i> {{ user.username }}</a></li>
+    </ul>
+    {% endif %}
+  </nav>
+  {% endblock %}
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="container footer-muted">
+    ShelfScan &mdash; Book position tracker
+  </footer>
+</body>
+</html>

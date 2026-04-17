@@ -1,4 +1,4 @@
-# Shelfscan Grand Plan
+# ShelfScan Grand Plan
 
 ## Goal
 

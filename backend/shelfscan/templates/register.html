@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Register — ShelfScan{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+<div class="form-card-narrow">
+  <p class="kicker">ShelfScan</p>
+  <h1 class="auth-heading">Create account</h1>
+  <p class="text-muted auth-subtitle">An admin must approve your account before you can log in.</p>
+
+  <div class="card">
+    <h3 class="card-heading">Register</h3>
+
+    {% if error %}
+    <div class="flash-error">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+    <div class="flash-success">{{ success }}</div>
+    {% endif %}
+
+    {% if not success %}
+    <form method="post" action="/register">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required minlength="2" maxlength="80" autofocus>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required minlength="6">
+
+      <button type="submit" class="btn-pill btn-pill-primary auth-submit">Register</button>
+    </form>
+    {% endif %}
+
+    <p class="text-center mt-1 auth-footer">
+      Already have an account? <a href="/login">Sign in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

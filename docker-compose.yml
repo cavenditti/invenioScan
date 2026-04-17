@@ -7,7 +7,7 @@ services:
     volumes:
       - db-data:/data
     environment:
-      - INVSCAN_DATABASE_URL=sqlite+aiosqlite:////data/invenioscan.db
+      - INVSCAN_DATABASE_URL=sqlite+aiosqlite:////data/shelfscan.db
       - INVSCAN_UPLOAD_DIR=/data/uploads
     restart: unless-stopped
 

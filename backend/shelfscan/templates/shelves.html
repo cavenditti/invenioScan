@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Shelves — ShelfScan{% endblock %}
+{% block content %}
+<div class="page-header">
+  <hgroup>
+    <p class="kicker">Locations</p>
+    <h1 class="mt-0">Shelves</h1>
+    <p class="text-muted">{{ shelves|length }} shelf unit{{ "s" if shelves|length != 1 else "" }} tracked</p>
+  </hgroup>
+  <a href="/shelves/new" class="btn-pill btn-pill-primary">+ Add Shelf</a>
+</div>
+
+{% if shelves %}
+<div class="grid">
+  {% for shelf in shelves %}
+  <article>
+    <header>
+      {% set coord = shelf.row ~ shelf.position ~ "-" ~ shelf.height %}
+      <strong><a href="/shelves/{{ shelf.id }}">{{ shelf.shelf_id }}{% if shelf.shelf_id != coord %} · {{ coord }}{% endif %}</a></strong>
+    </header>
+    {% if shelf.label %}<p>{{ shelf.label }}</p>{% endif %}
+    <p class="text-muted">{{ shelf_copy_counts.get(shelf.id, 0) }} copies</p>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">No shelves yet. Shelves are created automatically when you scan books, or <a href="/shelves/new">add one manually</a>.</p>
+{% endif %}
+{% endblock %}

@@ -1,6 +1,6 @@
 import uvicorn
 
-from invenioscan.app import app
+from shelfscan.app import app
 
 
 def main() -> None:

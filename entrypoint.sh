@@ -7,7 +7,7 @@ if [ -d "migrations" ]; then
     alembic upgrade head
 fi
 
-exec uvicorn invenioscan.app:app \
+exec uvicorn shelfscan.app:app \
     --host 0.0.0.0 \
     --port 8000 \
     --proxy-headers \

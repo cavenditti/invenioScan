@@ -6,9 +6,9 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-import invenioscan.database as db_module
-from invenioscan.auth import hash_password
-from invenioscan.models import User, UserStatus
+import shelfscan.database as db_module
+from shelfscan.auth import hash_password
+from shelfscan.models import User, UserStatus
 
 # Use in-memory SQLite for tests
 TEST_ENGINE = create_async_engine("sqlite+aiosqlite://", echo=False)
@@ -48,8 +48,8 @@ async def setup_db():
 @pytest.fixture
 async def client():
     # Re-import after patching: override the get_session dependency
-    from invenioscan.app import create_app
-    from invenioscan.database import get_session as original_get_session
+    from shelfscan.app import create_app
+    from shelfscan.database import get_session as original_get_session
 
     app = create_app()
 
