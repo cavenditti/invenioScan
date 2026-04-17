@@ -80,6 +80,11 @@ docker compose up --build
 
 This starts the full web app on `http://localhost:8000` and stores data in the Docker volume declared in `docker-compose.yml`.
 
+### Scaleway serverless deployment
+
+For a container-native Scaleway deployment, see `deploy/scaleway/README.md`.
+It provisions managed PostgreSQL, Object Storage, a container registry, and Serverless Containers with OpenTofu.
+
 ## Configuration
 
 All runtime settings use the `INVSCAN_` prefix.

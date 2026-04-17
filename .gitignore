@@ -1,5 +1,9 @@
 memories/
 uploads/
+.env
+deploy/scaleway/terraform/.terraform/
+deploy/scaleway/terraform/terraform.tfstate*
+deploy/scaleway/terraform/terraform.tfvars
 
 # Python-generated files
 __pycache__/
