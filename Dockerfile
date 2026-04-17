@@ -11,11 +11,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install backend
-COPY backend/pyproject.toml backend/README.md ./
+# Install the root Python project
+COPY pyproject.toml README.md ./
+COPY shelfscan ./shelfscan
+COPY alembic.ini main.py ./
+COPY migrations ./migrations
 RUN pip install --no-cache-dir .
-
-COPY backend/ ./
 
 # Pre-create directories that need to be writable
 RUN mkdir -p /data/uploads

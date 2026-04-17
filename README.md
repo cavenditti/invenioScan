@@ -53,14 +53,13 @@ ShelfScan is a shelf-first book position tracker built as a single web applicati
 ### Local development
 
 ```bash
-cd backend
 uv sync --extra dev
 uv run python main.py
 ```
 
 Then open `http://localhost:8000`.
 
-On first startup, ShelfScan creates a bootstrap admin user named `admin` with password `admin`.
+On first startup, ShelfScan creates a bootstrap admin user named `admin`.
 If `INVSCAN_BOOTSTRAP_ADMIN_PASSWORD` is not set, a random password is generated and printed to the startup logs.
 
 For local HTTP development, you may also want:
@@ -107,8 +106,10 @@ See `.env.example` for the full set of documented options.
 
 ## Project Layout
 
-- `backend/`: active application code, tests, migrations, and packaged Python project
-- `backend/shelfscan/`: current FastAPI app package
+- `shelfscan/`: current FastAPI app package
+- `tests/`: backend test suite
+- `migrations/`: Alembic migration history
+- `pyproject.toml`: root Python project configuration
 - `docker-compose.yml`: local container setup
 - `Dockerfile`: production-style image build for the web app
 - `app/`: archived legacy client, not used by the active product
