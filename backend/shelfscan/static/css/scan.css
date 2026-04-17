@@ -208,6 +208,70 @@
   word-break: break-all;
 }
 
+.scan-confirmation-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(15, 12, 9, 0.46);
+}
+
+.scan-confirmation-backdrop[hidden] {
+  display: none;
+}
+
+.scan-confirmation-modal {
+  width: min(100%, 28rem);
+  padding: 1.5rem;
+  border-radius: 24px;
+  border: 1px solid var(--pico-card-border-color);
+  background: var(--pico-card-background-color);
+  box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.28);
+}
+
+.scan-confirmation-kicker {
+  margin-bottom: 0.35rem;
+}
+
+.scan-confirmation-title {
+  margin: 0;
+  line-height: 1.15;
+}
+
+.scan-confirmation-author,
+.scan-confirmation-summary {
+  margin-bottom: 0;
+}
+
+.scan-confirmation-author {
+  margin-top: 0.45rem;
+  font-size: 1rem;
+}
+
+.scan-confirmation-summary {
+  margin-top: 0.7rem;
+  color: var(--pico-muted-color);
+}
+
+.scan-confirmation-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.95rem;
+  color: var(--pico-muted-color);
+  font-size: 0.9rem;
+}
+
+.scan-confirmation-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.1rem;
+}
+
 @media (max-width: 960px) {
   .scan-layout {
     grid-template-columns: 1fr;
@@ -234,5 +298,9 @@
 
   .scan-guide-frame {
     width: 84%;
+  }
+
+  .scan-confirmation-modal {
+    padding: 1.2rem;
   }
 }

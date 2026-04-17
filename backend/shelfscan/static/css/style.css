@@ -455,6 +455,53 @@ dd {
   margin-bottom: 0;
 }
 
+/* ── Shelves page ── */
+.shelves-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  align-items: stretch;
+}
+.shelf-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+.shelf-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.shelf-card-kicker {
+  margin-bottom: 0;
+}
+.shelf-card-title {
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+.shelf-card-title a {
+  text-decoration: none;
+}
+.shelf-card-meta {
+  margin: 0;
+  color: var(--pico-muted-color);
+  font-size: 0.9rem;
+}
+.shelf-card-label {
+  margin: 1rem 0 0.75rem;
+  min-height: 2.75rem;
+}
+.shelf-card-label-empty {
+  color: var(--pico-muted-color);
+  font-style: italic;
+}
+.shelf-card-count {
+  margin-top: auto;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--pico-muted-border-color);
+}
+
 /* ── Book detail ── */
 .cover-img {
   max-width: 100%;

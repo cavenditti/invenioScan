@@ -37,6 +37,14 @@
     resultCopyId: document.getElementById("result-copy-id"),
     resultScanId: document.getElementById("result-scan-id"),
     resultLink: document.getElementById("result-link"),
+    confirmationBackdrop: document.getElementById("scan-confirmation-backdrop"),
+    confirmationTitle: document.getElementById("scan-confirmation-title"),
+    confirmationAuthor: document.getElementById("scan-confirmation-author"),
+    confirmationSummary: document.getElementById("scan-confirmation-summary"),
+    confirmationStatus: document.getElementById("scan-confirmation-status"),
+    confirmationBookId: document.getElementById("scan-confirmation-book-id"),
+    confirmationCopyId: document.getElementById("scan-confirmation-copy-id"),
+    confirmationDismiss: document.getElementById("scan-confirmation-dismiss"),
   };
 
   const state = {
@@ -50,6 +58,8 @@
     engine: null,
     cameraPending: false,
     busy: false,
+    confirmationVisible: false,
+    confirmationTimer: null,
     lastAcceptedValue: "",
     lastAcceptedAt: 0,
   };
@@ -59,6 +69,7 @@
   const DUPLICATE_WINDOW_MS = 1500;
   const DETECTION_INTERVAL_MS = 450;
   const MAX_CAPTURE_WIDTH = 1600;
+  const CONFIRMATION_TIMEOUT_MS = 3000;
 
   function setStatus(message, tone) {
     elements.status.textContent = message;
@@ -223,6 +234,45 @@
   function updateControls() {
     elements.useShelfPayload.disabled = !elements.shelfPayload.value.trim() || state.busy;
     updateUiForMode();
+  }
+
+  function clearConfirmationTimer() {
+    if (state.confirmationTimer) {
+      window.clearTimeout(state.confirmationTimer);
+      state.confirmationTimer = null;
+    }
+  }
+
+  function hideConfirmationModal() {
+    clearConfirmationTimer();
+    state.confirmationVisible = false;
+    if (elements.confirmationBackdrop) {
+      elements.confirmationBackdrop.hidden = true;
+    }
+  }
+
+  function showConfirmationModal(response) {
+    if (!elements.confirmationBackdrop) {
+      return;
+    }
+
+    const shelf = getShelfPayload();
+    const status = response.enriched ? `${response.status} (enriched)` : response.status;
+
+    elements.confirmationTitle.textContent = response.title || "Saved";
+    elements.confirmationAuthor.textContent = response.author || "";
+    elements.confirmationAuthor.hidden = !response.author;
+    elements.confirmationSummary.textContent = shelf
+      ? `Saved to shelf ${shelf.shelf_id} · row ${shelf.row} · position ${shelf.position} · height ${shelf.height}`
+      : "Saved to the active shelf.";
+    elements.confirmationStatus.textContent = status;
+    elements.confirmationBookId.textContent = `Book #${response.book_id}`;
+    elements.confirmationCopyId.textContent = `Copy #${response.copy_id}`;
+
+    state.confirmationVisible = true;
+    elements.confirmationBackdrop.hidden = false;
+    clearConfirmationTimer();
+    state.confirmationTimer = window.setTimeout(hideConfirmationModal, CONFIRMATION_TIMEOUT_MS);
   }
 
   async function parseJsonResponse(response) {
@@ -446,7 +496,7 @@
   }
 
   async function handleDetectedRawValue(rawValue) {
-    if (state.busy) {
+    if (state.busy || state.confirmationVisible) {
       return false;
     }
 
@@ -713,6 +763,7 @@
       elements.manualIsbn.value = "";
       clearBookFields();
       updateResult(data);
+      showConfirmationModal(data);
       setStatus("Scan saved. Keep going on this shelf.", "success");
     } catch (error) {
       setStatus(error.message || "ISBN ingest failed.", "error");
@@ -814,6 +865,7 @@
 
       clearBookFields();
       updateResult(data);
+      showConfirmationModal(data);
       setStatus("Cover saved. Continue with the next book on this shelf.", "success");
     } catch (error) {
       setStatus(error.message || "Cover ingest failed.", "error");
@@ -864,6 +916,16 @@
   elements.submitIsbn.addEventListener("click", function () {
     handleManualIsbn();
   });
+  if (elements.confirmationDismiss) {
+    elements.confirmationDismiss.addEventListener("click", hideConfirmationModal);
+  }
+  if (elements.confirmationBackdrop) {
+    elements.confirmationBackdrop.addEventListener("click", function (event) {
+      if (event.target === elements.confirmationBackdrop) {
+        hideConfirmationModal();
+      }
+    });
+  }
   elements.shelfPayload.addEventListener("input", updateControls);
   elements.manualIsbn.addEventListener("input", updateControls);
   elements.manualIsbn.addEventListener("keydown", function (event) {
@@ -876,6 +938,14 @@
     element.addEventListener("input", updateUiForMode);
   });
 
-  window.addEventListener("pagehide", stopCamera);
+  window.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && state.confirmationVisible) {
+      hideConfirmationModal();
+    }
+  });
+  window.addEventListener("pagehide", function () {
+    hideConfirmationModal();
+    stopCamera();
+  });
   updateControls();
 })();

@@ -11,15 +11,20 @@
 </div>
 
 {% if shelves %}
-<div class="grid">
+<div class="shelves-grid">
   {% for shelf in shelves %}
-  <article>
-    <header>
-      {% set coord = shelf.row ~ shelf.position ~ "-" ~ shelf.height %}
-      <strong><a href="/shelves/{{ shelf.id }}">{{ shelf.shelf_id }}{% if shelf.shelf_id != coord %} · {{ coord }}{% endif %}</a></strong>
+  <article class="shelf-card">
+    <header class="shelf-card-header">
+      <p class="kicker shelf-card-kicker">Shelf</p>
+      <strong class="shelf-card-title"><a href="/shelves/{{ shelf.id }}">{{ shelf.shelf_id }}</a></strong>
+      <p class="shelf-card-meta">Row {{ shelf.row }} · position {{ shelf.position }} · height {{ shelf.height }}</p>
     </header>
-    {% if shelf.label %}<p>{{ shelf.label }}</p>{% endif %}
-    <p class="text-muted">{{ shelf_copy_counts.get(shelf.id, 0) }} copies</p>
+    {% if shelf.label %}
+    <p class="shelf-card-label">{{ shelf.label }}</p>
+    {% else %}
+    <p class="shelf-card-label shelf-card-label-empty">No label set yet.</p>
+    {% endif %}
+    <p class="text-muted shelf-card-count">{{ shelf_copy_counts.get(shelf.id, 0) }} copies</p>
   </article>
   {% endfor %}
 </div>

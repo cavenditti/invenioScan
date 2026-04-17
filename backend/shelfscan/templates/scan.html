@@ -182,4 +182,32 @@
     </div>
   </article>
 </div>
+
+<div id="scan-confirmation-backdrop" class="scan-confirmation-backdrop" hidden>
+  <section
+    class="scan-confirmation-modal"
+    role="dialog"
+    aria-labelledby="scan-confirmation-title"
+    aria-describedby="scan-confirmation-summary"
+  >
+    <p class="kicker scan-confirmation-kicker">Book Saved</p>
+    <h2 id="scan-confirmation-title" class="scan-confirmation-title">Saved</h2>
+    <p id="scan-confirmation-author" class="scan-confirmation-author" hidden></p>
+    <p id="scan-confirmation-summary" class="scan-confirmation-summary">Saved to the active shelf.</p>
+
+    <div class="scan-confirmation-meta">
+      <span id="scan-confirmation-status">created</span>
+      <span aria-hidden="true">·</span>
+      <span id="scan-confirmation-book-id">Book #0</span>
+      <span aria-hidden="true">·</span>
+      <span id="scan-confirmation-copy-id">Copy #0</span>
+    </div>
+
+    <div class="scan-confirmation-actions">
+      <button id="scan-confirmation-dismiss" class="btn-pill btn-pill-primary" type="button">
+        Dismiss
+      </button>
+    </div>
+  </section>
+</div>
 {% endblock %}

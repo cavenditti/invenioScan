@@ -497,6 +497,8 @@ async def test_scan_page_and_api_accept_web_cookie(client: AsyncClient):
     assert scan_resp.status_code == 200
     assert "Shelf-first scanning" in scan_resp.text
     assert "@zxing/browser@0.1.5" in scan_resp.text
+    assert "scan-confirmation-backdrop" in scan_resp.text
+    assert "Dismiss" in scan_resp.text
 
     me_resp = await client.get("/api/v1/auth/me")
     assert me_resp.status_code == 200
